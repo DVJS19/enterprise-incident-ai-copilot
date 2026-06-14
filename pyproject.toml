@@ -1,0 +1,22 @@
+[project]
+name = "enterprise-incident-ai-copilot"
+version = "0.1.0"
+description = "Enterprise Incident Response Copilot"
+requires-python = ">=3.13"
+
+dependencies = [
+    "boto3",
+    "pydantic>=2.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+    "mypy"
+]
+
+[tool.pytest.ini_options]
+addopts = "-p no:cacheprovider"
+pythonpath = ["."]
+testpaths = ["tests"]

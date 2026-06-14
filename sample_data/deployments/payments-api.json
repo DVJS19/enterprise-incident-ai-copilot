@@ -1,0 +1,8 @@
+[
+  {
+    "version":"v1.42",
+    "timestamp":"2026-06-11T14:27:00Z",
+    "deployed_by":"ci-cd-pipeline",
+    "changes":["Changed DynamoDB access pattern","Disabled payment-profile-cache"]
+  }
+]

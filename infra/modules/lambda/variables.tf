@@ -1,0 +1,11 @@
+variable "name_prefix" { type = string }
+variable "runtime" { type = string }
+variable "timeout" { type = number }
+variable "memory_size" { type = number }
+variable "lambda_role_arn" { type = string }
+variable "incident_state_table_name" { type = string }
+variable "audit_log_table_name" { type = string }
+variable "workflow_state_table_name" { type = string }
+variable "knowledge_base_bucket" { type = string }
+variable "artifacts_bucket" { type = string }
+variable "source_dir" { type = string }

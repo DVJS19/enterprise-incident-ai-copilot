@@ -1,0 +1,7 @@
+aws_region         = "us-west-2"
+environment        = "dev"
+project_name       = "incident-ai-copilot"
+owner              = "portfolio"
+lambda_runtime     = "python3.12"
+lambda_timeout     = 30
+lambda_memory_size = 512

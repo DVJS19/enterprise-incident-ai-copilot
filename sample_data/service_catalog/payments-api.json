@@ -1,0 +1,8 @@
+{
+  "service":"payments-api",
+  "owner":"payments-platform-team",
+  "tier":"critical",
+  "dependencies":["PaymentProfileTable","payment-profile-cache","fraud-check-api"],
+  "slo":{"availability":"99.9%","p95_latency_ms":500},
+  "escalation":"payments-oncall@example.com"
+}

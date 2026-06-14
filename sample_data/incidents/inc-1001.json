@@ -1,0 +1,8 @@
+{
+  "incident_id":"INC-1001",
+  "service":"payments-api",
+  "symptom":"latency spike",
+  "root_cause":"DynamoDB throttling after inefficient query pattern",
+  "resolution":"Rollback deployment and increase read capacity temporarily",
+  "related_metrics":["p95_latency_ms","dynamodb_throttled_requests"]
+}

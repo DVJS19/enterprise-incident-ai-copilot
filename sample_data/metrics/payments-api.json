@@ -1,0 +1,7 @@
+[
+  {"timestamp":"2026-06-11T14:25:00Z","metric":"p95_latency_ms","value":280},
+  {"timestamp":"2026-06-11T14:30:00Z","metric":"p95_latency_ms","value":420},
+  {"timestamp":"2026-06-11T14:34:00Z","metric":"p95_latency_ms","value":1900},
+  {"timestamp":"2026-06-11T14:35:00Z","metric":"dynamodb_throttled_requests","value":142},
+  {"timestamp":"2026-06-11T14:36:00Z","metric":"error_rate_percent","value":3.8}
+]

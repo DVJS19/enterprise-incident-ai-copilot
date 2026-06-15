@@ -50,3 +50,7 @@ Thumbs.db
 *.log
 tmp/
 temp/
+
+# Temporary AWS outputs
+*.aws.json
+*.bedrock.json

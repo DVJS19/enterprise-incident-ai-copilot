@@ -3,6 +3,7 @@ from services.mcp_tools.incident_tool import search_similar_incidents
 from services.mcp_tools.metrics_tool import find_metric_anomalies
 from services.mcp_tools.ownership_tool import get_service_owner
 from services.mcp_tools.runbook_tool import get_runbook
+from services.mcp_tools.knowledge_tool import search_knowledge_base
 
 
 def investigate_incident(service: str, symptom: str = "latency") -> dict:
@@ -11,6 +12,11 @@ def investigate_incident(service: str, symptom: str = "latency") -> dict:
     similar_incidents = search_similar_incidents(service, symptom)
     ownership = get_service_owner(service)
     runbook = get_runbook(service, symptom)
+
+    knowledge_results = search_knowledge_base(
+    query=f"{service} {symptom}",
+    service=service,
+    )
 
     return {
         "service": service,
@@ -23,6 +29,7 @@ def investigate_incident(service: str, symptom: str = "latency") -> dict:
         "runbook_preview": runbook[:500],
         "likely_root_cause": _infer_root_cause(metrics, deployments, similar_incidents),
         "recommended_actions": _recommend_actions(metrics, deployments, similar_incidents),
+        "knowledge_results": knowledge_results,
     }
 
 

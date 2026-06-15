@@ -17,3 +17,13 @@ Do not invent facts.
 Evidence:
 
 {evidence}
+
+Return ONLY valid JSON in this exact shape:
+
+{{
+  "root_cause": "string",
+  "confidence": 0.0,
+  "impact_assessment": "string",
+  "recommended_actions": ["string"],
+  "escalation_recommendations": ["string"]
+}}

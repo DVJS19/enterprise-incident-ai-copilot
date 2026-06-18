@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Any
 import re
+from services.rag.rag_service import rag_service
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 KNOWLEDGE_BASE_DIR = PROJECT_ROOT / "sample_data" / "knowledge_base"
@@ -94,27 +96,30 @@ def extract_recommended_actions(content: str) -> list[str]:
 def find_known_fix(
     service: str,
     symptom: str,
-    min_score: int = 1,
+    min_score: float = 0.05,
 ) -> dict | None:
     query = f"{service} {symptom} fix mitigation resolution rollback re-enable"
-    results = search_knowledge_base(query=query, service=service)
 
-    if not results:
-        return None
+    results = rag_service.search(
+        query=query,
+        top_k=5,
+    )
 
-    top_result = results[0]
+    for result in results:
+        if result.score < min_score:
+            continue
 
-    if top_result["score"] < min_score:
-        return None
-    actions = extract_recommended_actions(
-    top_result["content_preview"]
-)
+        actions = extract_recommended_actions(result.text)
 
+        if not actions:
+            continue
 
-    return {
-        "match_type": "known_fix",
-        "confidence": min(top_result["score"] / 10, 1.0),
-        "document_name": top_result["document_name"],
-        "recommended_actions": actions,
-        "score": top_result["score"],
-    }
+        return {
+            "match_type": "known_fix",
+            "confidence": round(min(result.score * 10, 1.0), 2),
+            "document_name": result.document_name,
+            "recommended_actions": actions,
+            "score": result.score,
+        }
+
+    return None

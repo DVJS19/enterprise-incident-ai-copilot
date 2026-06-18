@@ -15,13 +15,11 @@ class InvestigationWorkflow:
         known_fix = find_known_fix(
             service=service,
             symptom=symptom,
-            min_score=1,
+            min_score=0.05,
 
         )
-        print(f"KNOWN_FIX: {known_fix}")
+       
         if known_fix and known_fix["confidence"] >= 0.2:
-            print(f"Knowledge Fix Found: {known_fix is not None}"
-)
             return {
                 "source": "knowledge_base",
                 "routing_decision": "known_fix_found_no_llm_called",

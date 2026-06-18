@@ -98,27 +98,73 @@ def find_known_fix(
     symptom: str,
     min_score: float = 0.05,
 ) -> dict | None:
-    query = f"{service} {symptom} fix mitigation resolution rollback re-enable"
+    """
+    Search the semantic knowledge base for a known fix.
+
+    Routing goal:
+    - If we find a sufficiently relevant KB article with actionable steps,
+      return it and avoid LLM invocation.
+    - Otherwise return None so the workflow proceeds to evidence gathering
+      and AI investigation.
+    """
+
+    query = (
+        f"{service} "
+        f"{symptom} "
+        "fix mitigation resolution rollback re-enable"
+    )
 
     results = rag_service.search(
         query=query,
         top_k=5,
     )
 
+    if not results:
+        return None
+
+    # Extract important symptom words from the request.
+    # Example:
+    # "checkout confirmation delay"
+    # -> {"checkout", "confirmation", "delay"}
+    symptom_terms = {
+        term.lower()
+        for term in symptom.split()
+        if len(term) > 2
+    }
+
     for result in results:
+
+        # Reject weak semantic matches.
         if result.score < min_score:
             continue
 
-        actions = extract_recommended_actions(result.text)
+        # Additional guardrail:
+        # Ensure at least one symptom term appears in the retrieved chunk.
+        matched_terms = [
+            term
+            for term in symptom_terms
+            if term in result.text.lower()
+        ]
+
+        if not matched_terms:
+            continue
+
+        actions = extract_recommended_actions(
+            result.text
+        )
 
         if not actions:
             continue
 
         return {
             "match_type": "known_fix",
-            "confidence": round(min(result.score * 10, 1.0), 2),
+            "confidence": round(
+                min(result.score * 10, 1.0),
+                2,
+            ),
             "document_name": result.document_name,
             "recommended_actions": actions,
+            "matched_terms": matched_terms,
             "score": result.score,
         }
 
